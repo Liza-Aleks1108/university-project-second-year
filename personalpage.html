@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Показники водоміру</title>
+  </head>
+  <body>
+    <h2>Дані користувача:</h2>
+    <p><strong>Ім'я:</strong> <span id="userName"></span></p>
+    <p><strong>Прізвище:</strong> <span id="userLastName"></span></p>
+    <p><strong>По батькові:</strong> <span id="userPatronymic"></span></p>
+    <p><strong>Номер телефону:</strong> <span id="userPhone"></span></p>
+    <p><strong>Електронна адреса:</strong> <span id="userEmail"></span></p>
+    <p><strong>РНОКПП (ІПН):</strong> <span id="userTaxNumber"></span></p>
+
+    <hr />
+
+    <h2>Показники водоміру:</h2>
+    <form id="waterMeterForm">
+      <label for="previousReading">Попередні показники м³:</label>
+      <input
+        type="number"
+        id="previousReading"
+        name="previousReading"
+        required
+      />
+      <br />
+      <label for="previousPaid">Попередні показники сплачено:</label>
+      <input type="checkbox" id="previousPaid" name="previousPaid" />
+      <br />
+      <label for="currentReading">Поточні показники м³:</label>
+      <input type="number" id="currentReading" name="currentReading" required />
+      <br />
+      <label for="currentPaid">Поточні показники сплачено:</label>
+      <input type="checkbox" id="currentPaid" name="currentPaid" />
+      <br />
+      <button type="submit">Розрахувати</button>
+      <br />
+      <label for="waterUsage"
+        >Використана кількість води м³ (неоплачено):</label
+      >
+      <input type="number" id="waterUsage" name="waterUsage" readonly />
+      <br />
+      <label for="ratePerCubicMeter"
+        >Тариф за 1 м³ на 15.05.2024 становить 32грн</label
+      >
+      <br />
+      <label for="totalCost">Загальна сума до оплати (грн):</label>
+      <input type="number" id="totalCost" name="totalCost" readonly />
+    </form>
+
+    <script src="./register.js"></script>
+    <script src="./personalpage.js"></script>
+  </body>
+</html>
