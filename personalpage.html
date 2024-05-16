@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Показники водоміру</title>
+    <link rel="stylesheet" href="./personalpage.css" />
   </head>
   <body>
     <h2>Дані користувача:</h2>
@@ -49,8 +50,17 @@
       <label for="totalCost">Загальна сума до оплати (грн):</label>
       <input type="number" id="totalCost" name="totalCost" readonly />
     </form>
+    <button id="generateReport">Згенерувати звіт</button>
 
-    <script src="./register.js"></script>
+    <!-- Модальне вікно -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Звіт водоміру</h2>
+        <div id="reportContent" class="report-content"></div>
+      </div>
+    </div>
+
     <script src="./personalpage.js"></script>
   </body>
 </html>

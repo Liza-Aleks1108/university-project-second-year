@@ -1,55 +1,54 @@
 document.addEventListener("DOMContentLoaded", function () {
-  document
-    .getElementById("registrationForm")
-    .addEventListener("submit", async function (event) {
-      event.preventDefault();
+  const registrationForm = document.getElementById("registrationForm");
 
-      // Отримуємо значення з полів форми
-      const firstName = document.getElementById("firstName").value;
-      const lastName = document.getElementById("lastName").value;
-      const patronymic = document.getElementById("patronymic").value;
-      const phoneNumber = document.getElementById("phoneNumber").value;
-      const email = document.getElementById("email").value;
-      const taxNumber = document.getElementById("taxNumber").value;
-      const password = document.getElementById("password").value;
+  // Функція для оновлення даних в локальному сховищі
+  const updateUserInLocalStorage = (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+  };
 
-      // Створюємо об'єкт для зберігання даних користувача
-      const user = {
-        firstName: firstName,
-        lastName: lastName,
-        patronymic: patronymic,
-        phoneNumber: phoneNumber,
-        email: email,
-        taxNumber: taxNumber,
-        password: password,
-      };
+  // Функція для оновлення об'єкта user
+  const updateUserObject = () => {
+    const user = {
+      firstName: document.getElementById("firstName").value,
+      lastName: document.getElementById("lastName").value,
+      patronymic: document.getElementById("patronymic").value,
+      phoneNumber: document.getElementById("phoneNumber").value,
+      email: document.getElementById("email").value,
+      taxNumber: document.getElementById("taxNumber").value,
+      password: document.getElementById("password").value,
+    };
 
-      // Зберігаємо дані користувача у локальному сховищі браузера
-      localStorage.setItem("user", JSON.stringify(user));
+    updateUserInLocalStorage(user); // Оновлення даних в локальному сховищі
+  };
 
-      // Збереження в базі даних IndexedDB
-      await saveUserToIndexedDB(user);
+  // Обробник події введення для кожного поля форми
+  registrationForm.addEventListener("input", updateUserObject);
 
-      // Переходимо на сторінку personalpage.html
-      window.location.href = "personalpage.html";
-    });
+  // Обробник події відправки форми
+  registrationForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    try {
+      // Відправка даних на сервер
+      const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.ok) {
+        console.log("User data sent successfully");
+        // Переходимо на сторінку personalpage.html
+        window.location.href = "personalpage.html";
+      } else {
+        console.error("Error sending user data");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
 });
-
-async function saveUserToIndexedDB(user) {
-  try {
-    const db = await openDB("users-database", 1, {
-      upgrade(db) {
-        db.createObjectStore("users", { keyPath: "id", autoIncrement: true });
-      },
-    });
-
-    const tx = db.transaction("users", "readwrite");
-    const store = tx.objectStore("users");
-    await store.add(user);
-    await tx.done;
-
-    console.log("User saved to IndexedDB");
-  } catch (error) {
-    console.error("Error saving user to IndexedDB:", error);
-  }
-}

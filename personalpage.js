@@ -48,4 +48,85 @@ document.addEventListener("DOMContentLoaded", function () {
       // Відображення загальної суми до оплати
       document.getElementById("totalCost").value = totalCost.toFixed(2); // Округлення до двох знаків після коми
     });
+
+  // Обробник події для створення звіту
+  document
+    .getElementById("generateReport")
+    .addEventListener("click", function () {
+      // Отримати дані з форми
+      const previousReading = parseFloat(
+        document.getElementById("previousReading").value
+      );
+      const previousPaid = document.getElementById("previousPaid").checked;
+      const currentReading = parseFloat(
+        document.getElementById("currentReading").value
+      );
+      const currentPaid = document.getElementById("currentPaid").checked;
+      const waterUsage = parseFloat(
+        document.getElementById("waterUsage").value
+      );
+      const totalCost = parseFloat(document.getElementById("totalCost").value);
+
+      // Відображення даних у модальному вікні
+      const reportContent = `
+            <p><strong>Ім'я:</strong> ${userData.firstName}</p>
+            <p><strong>Прізвище:</strong> ${userData.lastName}</p>
+            <p><strong>По батькові:</strong> ${userData.patronymic}</p>
+            <p><strong>Номер телефону:</strong> ${userData.phoneNumber}</p>
+            <p><strong>Електронна адреса:</strong> ${userData.email}</p>
+            <p><strong>РНОКПП (ІПН):</strong> ${userData.taxNumber}</p>
+            <h2>Показники водоміру</h2>
+            <table>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значення</th>
+                </tr>
+                <tr>
+                    <td>Попередні показники м³:</td>
+                    <td>${previousReading}</td>
+                </tr>
+                <tr>
+                    <td>Попередні показники сплачено:</td>
+                    <td>${previousPaid ? "Так" : "Ні"}</td>
+                </tr>
+                <tr>
+                    <td>Поточні показники м³:</td>
+                    <td>${currentReading}</td>
+                </tr>
+                <tr>
+                    <td>Поточні показники сплачено:</td>
+                    <td>${currentPaid ? "Так" : "Ні"}</td>
+                </tr>
+                <tr>
+                    <td>Використана кількість води м³ (неоплачено):</td>
+                    <td>${waterUsage}</td>
+                </tr>
+                <tr>
+                    <td>Тариф за 1 м³:</td>
+                    <td>32 грн</td>
+                </tr>
+                <tr>
+                    <td>Загальна сума до оплати (грн):</td>
+                    <td>${totalCost.toFixed(2)}</td>
+                </tr>
+            </table>
+        `;
+
+      document.getElementById("reportContent").innerHTML = reportContent;
+
+      // Показати модальне вікно
+      document.getElementById("modal").style.display = "block";
+    });
+
+  // Закриття модального вікна
+  document.querySelector(".close").addEventListener("click", function () {
+    document.getElementById("modal").style.display = "none";
+  });
+
+  // Закриття модального вікна при кліку поза його межами
+  window.addEventListener("click", function (event) {
+    if (event.target == document.getElementById("modal")) {
+      document.getElementById("modal").style.display = "none";
+    }
+  });
 });
